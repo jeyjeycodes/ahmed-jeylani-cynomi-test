@@ -22,6 +22,7 @@ import {
 } from "@/forms/sleep-data-form/sleep-data-form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "@prisma/client";
+import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 
@@ -35,8 +36,16 @@ export default function Home() {
     },
   });
 
-  const handleSubmit = async (data: sleepDataFields) => {
-    console.log(data);
+  const handleSubmit = async ({
+    name,
+    gender,
+    sleepDuration,
+  }: sleepDataFields) => {
+    try {
+      await axios.post("/api/sleep-data", { name, gender, sleepDuration });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
