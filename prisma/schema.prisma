@@ -15,10 +15,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model SleepData {
   id            Int      @id @default(autoincrement())
   name          String
-  gender        String
+  gender        Gender
   sleepDurationHrs Int
   date          DateTime @default(now())
 }
