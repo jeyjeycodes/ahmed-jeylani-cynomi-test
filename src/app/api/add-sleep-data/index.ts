@@ -1,10 +1,14 @@
 import {NextApiRequest, NextApiResponse} from "next";
+import {prismaClient} from "@/lib/prismaClient";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { userId, sleepData } = req.body;
-    console.log(userId, sleepData)
-    res.status(200).json({ userId, sleepData })
+    const { name, gender, sleepDuration } = req.body;
+    const date = new Date();
+    await prismaClient.sleepData.create({
+      data: { name, gender, sleepDurationHrs: parseInt(sleepDuration), date },
+    });
+    res.status(201).json({ message: 'Sleep data saved.' });
   } else {
     res.status(405).json({ message: 'Method Not Allowed' })
   }
