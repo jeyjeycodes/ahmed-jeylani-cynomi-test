@@ -24,9 +24,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Gender } from "@prisma/client";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 export default function Home() {
+  const router = useRouter();
   const form = useForm<sleepDataFields>({
     resolver: zodResolver(sleepDataFormSchema),
     defaultValues: {
@@ -43,6 +45,7 @@ export default function Home() {
   }: sleepDataFields) => {
     try {
       await axios.post("/api/sleep-data", { name, gender, sleepDuration });
+      await router.push("/sleep-entries");
     } catch (e) {
       console.error(e);
     }
