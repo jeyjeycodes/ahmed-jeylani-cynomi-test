@@ -45,7 +45,7 @@ export default function Home() {
   }: sleepDataFields) => {
     try {
       await axios.post("/api/sleep-data", { name, gender, sleepDuration });
-      await router.push("/sleep-entries");
+      router.push("/sleep-entries");
     } catch (e) {
       console.error(e);
     }

@@ -5,11 +5,22 @@ export async function POST(req: Request) {
   if (req.method === "POST") {
     const { name, gender, sleepDuration } = await req.json();
     const date = new Date();
-    console.log("name: ", name);
-    console.log("gender: ", gender);
-    console.log("sleepDuration: ", sleepDuration);
+    // Upsert user and create sleep data
+    const user = await prismaClient.user.upsert({
+      where: { name },
+      update: {},
+      create: {
+        name,
+        gender,
+      },
+    });
+
     await prismaClient.sleepData.create({
-      data: { name, gender, sleepDurationHrs: parseInt(sleepDuration), date },
+      data: {
+        sleepDurationHrs: parseInt(sleepDuration.toString()),
+        date: new Date(),
+        userId: user.id,
+      },
     });
     return NextResponse.json({ message: "Sleep data saved." }, { status: 201 });
   } else {
@@ -24,8 +35,15 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   if (req.method === "GET") {
-    const sleepData = await prismaClient.sleepData.findMany();
-    return NextResponse.json(sleepData);
+    const users = await prismaClient.user.findMany({
+      include: {
+        sleepData: true, // Include related sleep data
+      },
+    });
+
+    console.log("payload: ", users);
+
+    return NextResponse.json(users);
   } else {
     return NextResponse.json(
       { error: "Method not allowed" },

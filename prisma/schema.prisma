@@ -20,10 +20,19 @@ enum Gender {
   FEMALE
 }
 
+model User {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  gender    Gender
+  sleepData SleepData[]
+}
+// This relationship allows you to query related data from the SleepData table directly through the User model,
+// even though the sleepData field itself is not stored as a column in the User table
+// Prisma schema defines a one-to-many relationship between the User and SleepData models
 model SleepData {
   id            Int      @id @default(autoincrement())
-  name          String
-  gender        Gender
   sleepDurationHrs Int
   date          DateTime @default(now())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id])
 }
