@@ -41,8 +41,6 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log("payload: ", users);
-
     return NextResponse.json(users);
   } else {
     return NextResponse.json(
