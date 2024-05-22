@@ -59,6 +59,7 @@ Start the Next.js development server:
 ```bash
 yarn dev
 ```
+Open your browser and navigate to http://localhost:3000 to see the application in action.
 
 ### API Endpoints
 - **POST `/api/sleep-data`**: Create a new sleep entry for a user.
@@ -71,3 +72,40 @@ PGDATABASE='cynomi'
 PGUSER='cynomi_owner'
 PGPASSWORD='wQzl87WIfBGD'
 ```
+
+## Running PostgreSQL Locally Using Docker (Optional)
+
+To run PostgreSQL locally using Docker, follow these steps:
+
+### 1. Install Docker
+
+Make sure you have Docker installed on your machine. You can download and install Docker from [here](https://www.docker.com/products/docker-desktop).
+
+### 2. Run PostgreSQL Container
+
+Run the following command to start a PostgreSQL container:
+
+```bash
+docker run --name postgres -e POSTGRES_PASSWORD=yourpassword -e POSTGRES_USER=yourusername -e POSTGRES_DB=yourdatabase -p 5432:5432 -d postgres
+```
+Replace yourpassword, yourusername, and yourdatabase with your desired PostgreSQL password, username, and database name.
+
+### 3. Update Environment Variables
+Update your .env file with the connection details for your local PostgreSQL instance:
+```dotenv
+DATABASE_URL="postgresql://yourusername:yourpassword@localhost:5432/yourdatabase"
+```
+
+### 4. Apply Prisma Migrations
+```bash
+yarn prisma generate
+yarn prisma migrate dev --name init
+```
+
+### 5. Start the Development Server
+```bash
+yarn dev
+```
+Open your browser and navigate to http://localhost:3000 to see the application in action.
+
+
