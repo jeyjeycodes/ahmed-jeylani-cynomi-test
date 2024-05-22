@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   if (req.method === "POST") {
     const { name, gender, sleepDuration } = await req.json();
-    const date = new Date();
+
     // Upsert user and create sleep data
     const user = await prismaClient.user.upsert({
       where: { name },
@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     await prismaClient.sleepData.create({
       data: {
         sleepDurationHrs: parseInt(sleepDuration.toString()),
-        date: new Date(),
+        date: new Date().toISOString(),
         userId: user.id,
       },
     });
@@ -37,7 +37,12 @@ export async function GET(req: Request) {
   if (req.method === "GET") {
     const users = await prismaClient.user.findMany({
       include: {
-        sleepData: true, // Include related sleep data
+        sleepData: {
+          // Include related sleep data
+          orderBy: {
+            date: "asc", // Sorting by date in ascending order
+          },
+        },
       },
     });
 

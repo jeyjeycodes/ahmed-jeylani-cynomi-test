@@ -49,7 +49,7 @@ export default function Page() {
       {chosenUser && (
         <>
           <h1 className={"text-4xl mt-10"}>
-            Sleep Bar Chart for {chosenUser?.name}
+            {chosenUser?.name}&apos;s Sleep Bar Chart for the last 7 days
           </h1>
           <UserBarChart userData={chosenUser} />
         </>
